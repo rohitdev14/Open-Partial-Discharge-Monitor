@@ -1,5 +1,7 @@
+from datetime import datetime, timezone
 from pathlib import Path
 import sys
+
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"simulator"))
 sys.path.insert(0,str(ROOT/"simulator"/"synthetic_pd"))
@@ -11,8 +13,9 @@ from build import build_prpd
 
 def test_step1b_is_deterministic_and_phase_resolved():
     cfg=SimulationConfig(seed=7)
-    a=generate(cfg,start_utc=__import__("datetime").datetime(2026,9,23,tzinfo=__import__("datetime").timezone.utc)
-    b=generate(cfg,start_utc=__import__("datetime").datetime(2026,9,23,tzinfo=__import__("datetime").timezone.utc)
+    fixed_time=datetime(2026,9,23,tzinfo=timezone.utc)
+    a=generate(cfg,start_utc=fixed_time)
+    b=generate(cfg,start_utc=fixed_time)
     assert a["waveform"]==b["waveform"]
     events=detect_pulses(a["waveform"],a["phase_deg"])
     assert events

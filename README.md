@@ -2,7 +2,18 @@
 
 Open-source, Dockerized partial-discharge monitoring platform for commercially available HFCT/TEV sensors, local analytics, PRPD, trending, and OPC UA/SCADA integration.
 
-> **Project status: architecture / POC baseline. Not a certified protection or calibrated PD measurement instrument.**
+> **Project status: Step 1B software simulation validated in GitHub Actions; Step 1C synchronized Digital Twin–PD experiment in development. Not a certified protection or calibrated PD measurement instrument.**
+
+## Build status
+
+| Stage | Outcome | Status |
+|---|---|---|
+| Step 1A | Architecture, open-source baseline and electrical SLD | ✅ Complete |
+| Step 1B | Deterministic M-101 synthetic HF waveform → pulse detection → phase association → PRPD → evidence artifacts | ✅ Validated |
+| Step 1C | Synchronize PD evidence with operational-digital-twin telemetry using UTC + asset identity + run ID | 🚧 In development |
+| Step 1D | Physical HFCT / DAQ acquisition and bench validation | ⏳ Planned |
+
+**Step 1B validation baseline:** fix commit `f53a4c770f858615d9003f8cd7c243181e99f487`; GitHub Actions validation #2 reported successful by the project owner. This validates the software simulation pipeline only, not calibrated pC measurement or real defect diagnosis.
 
 ## Mission
 

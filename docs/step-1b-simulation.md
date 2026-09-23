@@ -1,5 +1,7 @@
 # Step 1B — Digital-Twin PD Simulation
 
+**Status: VALIDATED — GitHub Actions validation #2 successful after test syntax correction at commit `f53a4c770f858615d9003f8cd7c243181e99f487`.**
+
 Step 1B builds a deterministic synthetic Partial Discharge development branch around the M-101 electrical feeder before physical HFCT/DAQ procurement.
 
 ## Pipeline

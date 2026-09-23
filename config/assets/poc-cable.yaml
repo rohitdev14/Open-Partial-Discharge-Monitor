@@ -1,0 +1,10 @@
+site:
+  id: POC-Site
+  systems:
+    - id: MV-System-01
+      equipment:
+        - id: Cable-01
+          measurement_points:
+            - id: Termination-R
+              sensors:
+                - HFCT-001

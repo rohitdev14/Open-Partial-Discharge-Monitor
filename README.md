@@ -2,7 +2,7 @@
 
 Open-source, Dockerized partial-discharge monitoring platform for commercially available HFCT/TEV sensors, local analytics, PRPD, trending, and OPC UA/SCADA integration.
 
-> **Project status: Step 1B software simulation validated in GitHub Actions; Step 1C synchronized Digital Twin–PD experiment in development. Not a certified protection or calibrated PD measurement instrument.**
+> **Project status: Steps 1A–1C complete; Step 1C synchronized Digital Twin–PD software integration frozen as the validated baseline. Step 1D physical HFCT/DAQ bench validation is next. Not a certified protection or calibrated PD measurement instrument.**
 
 ## Build status
 
@@ -10,10 +10,12 @@ Open-source, Dockerized partial-discharge monitoring platform for commercially a
 |---|---|---|
 | Step 1A | Architecture, open-source baseline and electrical SLD | ✅ Complete |
 | Step 1B | Deterministic M-101 synthetic HF waveform → pulse detection → phase association → PRPD → evidence artifacts | ✅ Validated |
-| Step 1C | Synchronize PD evidence with operational-digital-twin telemetry using UTC + asset identity + run ID | 🚧 In development |
+| Step 1C | Synchronize PD evidence with operational-digital-twin telemetry using UTC + asset identity + run ID | ✅ Validated / frozen |
 | Step 1D | Physical HFCT / DAQ acquisition and bench validation | ⏳ Planned |
 
 **Step 1B validation baseline:** fix commit `f53a4c770f858615d9003f8cd7c243181e99f487`; GitHub Actions validation #2 reported successful by the project owner. This validates the software simulation pipeline only, not calibrated pC measurement or real defect diagnosis.
+
+**Step 1C frozen baseline:** GitHub Actions run #3 at commit `a76c30d871e7cc61f575e41f00c33663a8d2f055` completed successfully. Run `DT-PD-STEP1C-001` produced 16 detected/correlated synthetic PD events, with maximum Digital Twin correlation delta 0.034712 s. Healthy capture: 0 events; P-101 precursor window: 8/8 correlated; P-101 post-trip window: 8/8 correlated. The evidence artifact `step1c-synchronized-evidence` was uploaded by CI. This validates synchronization/correlation architecture only; it does not establish physical causation, real defect diagnosis or calibrated apparent charge.
 
 ## Mission
 

@@ -1,11 +1,32 @@
 # Partial Discharge Monitoring System --- PROJECT.md
 
-**Status:** Architecture and implementation baseline\
+**Status:** Steps 1A–1C software baseline validated and frozen; Step 1D physical HFCT/DAQ bench validation next\
 **Deployment model:** On-premises\
 **Implementation gates:** Step 1 --- local PC POC; Step 2 --- fixed
 field acquisition integrated to SCADA through OPC UA\
 **Repository rule:** No GitHub push, pull-request merge, or repository
 implementation without explicit project-owner approval.
+
+------------------------------------------------------------------------
+
+## Current Build Status
+
+| Stage | Scope | Status |
+|---|---|---|
+| Step 1A | Architecture, repository baseline and electrical SLD | Complete |
+| Step 1B | Deterministic synthetic HFCT waveform, pulse detection, phase association and PRPD evidence | Validated |
+| Step 1C | M-101 PD evidence synchronized with P-101 operational Digital Twin telemetry | **Validated / frozen** |
+| Step 1D | Physical HFCT / high-speed DAQ bench acquisition and validation | Next |
+
+### Step 1C frozen validation baseline
+
+GitHub Actions run #3 at PD repository commit `a76c30d871e7cc61f575e41f00c33663a8d2f055` successfully executed the synchronized experiment `DT-PD-STEP1C-001`.
+
+The run produced 16 detected synthetic PD events and correlated all 16 to the appropriate P-101 Digital Twin operating context. Maximum timestamp correlation delta was 0.034712 s. The healthy capture produced no detected events; the precursor and post-trip captures each produced and correlated eight events. CI also validated the evidence files and uploaded `step1c-synchronized-evidence`.
+
+This gate validates the cross-project data contract and synchronization architecture. It does not validate a physical HFCT/DAQ chain, calibrated apparent charge in pC, defect classification, or a causal relationship between the Digital Twin failure scenario and synthetic PD activity.
+
+The Step 1C software baseline is now frozen. The next engineering gate is Step 1D: physical HFCT/DAQ bench validation.
 
 ------------------------------------------------------------------------
 

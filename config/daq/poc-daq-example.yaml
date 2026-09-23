@@ -1,0 +1,10 @@
+daq:
+  id: DAQ-POC-001
+  driver: picoscope
+  model: TBD
+  channels:
+    A: HFCT-001
+    B: HFCT-002
+    C: PHASE-REF-001
+    D: SPARE
+  sample_rate_hz: 100000000

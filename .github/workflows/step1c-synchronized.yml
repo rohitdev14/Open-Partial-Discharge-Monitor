@@ -1,0 +1,57 @@
+name: Step 1C synchronized experiment
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  synchronized-experiment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PD repository
+        uses: actions/checkout@v4
+        with:
+          path: pd
+      - name: Checkout operational digital twin
+        uses: actions/checkout@v4
+        with:
+          repository: rohitdev14/operational-digital-twin
+          path: twin
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install pytest PyYAML
+      - name: Run Step 1C contract tests
+        working-directory: pd
+        run: pytest -q tests/test_step1c.py
+      - name: Run synchronized experiment
+        run: python pd/experiments/run_step1c_synchronized.py --pd-root pd --twin-root twin --output artifacts/step1c
+      - name: Validate synchronized evidence
+        run: |
+          test -s artifacts/step1c/experiment_manifest.json
+          test -s artifacts/step1c/correlated_events.csv
+          test -s artifacts/step1c/summary.json
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          p=Path("artifacts/step1c")
+          m=json.loads((p/"experiment_manifest.json").read_text())
+          s=json.loads((p/"summary.json").read_text())
+          rows=list(csv.DictReader((p/"correlated_events.csv").open()))
+          assert m["run_id"]=="DT-PD-STEP1C-001"
+          assert m["pd_asset_id"]=="M-101"
+          assert m["pump_asset_id"]=="P-101"
+          assert rows
+          assert s["correlated_event_count"]==len(rows)
+          assert s["max_correlation_delta_s"] <= 1.0
+          assert s["operating_contexts"]
+          print(json.dumps(s,indent=2))
+          PY
+      - name: Upload synchronized evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: step1c-synchronized-evidence
+          path: artifacts/step1c/

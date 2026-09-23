@@ -1,0 +1,51 @@
+name: Step 1B validation
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  validate-step1b:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependency
+        run: python -m pip install pytest
+      - name: Run Step 1B tests
+        run: pytest -q tests/test_step1b.py
+      - name: Generate Step 1B artifacts
+        run: python simulator/run_step1b.py
+      - name: Validate artifacts and metadata
+        run: |
+          test -s artifacts/step1b/metadata.json
+          test -s artifacts/step1b/waveform.csv
+          test -s artifacts/step1b/events.csv
+          test -s artifacts/step1b/prpd.json
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          p=Path("artifacts/step1b")
+          m=json.loads((p/"metadata.json").read_text())
+          events=list(csv.DictReader((p/"events.csv").open()))
+          prpd=json.loads((p/"prpd.json").read_text())
+          assert m["asset_id"]=="M-101"
+          assert m["pump_asset_id"]=="P-101"
+          assert m["source"]=="pd-simulator"
+          assert m["measurement_status"]=="synthetic_not_calibrated_pc"
+          assert m["timestamp_utc"].endswith("Z")
+          assert events, "No pulses detected"
+          assert prpd, "No PRPD bins generated"
+          assert all(0 <= float(e["phase_deg"]) < 360 for e in events)
+          print(f"validated events={len(events)}, prpd_bins={len(prpd)}")
+          PY
+      - name: Upload Step 1B evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: step1b-validation-evidence
+          path: artifacts/step1b/
